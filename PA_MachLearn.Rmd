@@ -1,0 +1,102 @@
+---
+title: "Machine Learning: <br><small><b>Peer Assessment - Course Project</b></small>"
+author: "<a href='mailto:svicente99@yahoo.com' title='twitter:@svicente99'>Sergio Vicente</a>"
+twitter: "@svicente99"
+date: "May, 2015"
+output: 
+  html_document:
+    keep_md: true
+transition: fade
+transition-speed: fast
+subtitle: "<span style='color:#5882FA;font-size:0.8em'>Human Activity Monitoring</span>" 
+---
+
+<br><br>
+You may get source code of this at <https://github.com/svicente99/MachLearn_PeerAssessment> 
+
+And html version is available at RPubs: <http://rpubs.com/svicente99/MachLearn_Peer_Assesment2>
+
+* * * *
+
+### Synopsis
+
+------------
+
+#### Introduction
+
+
+---------
+
+#### Data Sourcing
+
+The data for this assignment can be downloaded from the course web site:
+
+* Dataset: <a href="http://groupware.les.inf.puc-rio.br/har.">Activity Data</a> [__ MBytes]
+
+There is also some documentation of the database available. See above links to know how some of the variables are constructed/defined.
+
+---------
+
+### Data Processing
+
+Setting parameters and files to be processed:
+
+```{r, cache=TRUE}
+
+# MAIN PARAMETERS
+DATA_FOLDER <- "./data"  # subdirectory of current named 'data'
+URL_DATA <- "https://d396qusza40orc.cloudfront.net/predmachlearn"
+CSV_TRAIN <- "pml-training.csv"
+CSV_TEST <- "pml-testing.csv"
+# -----------------------------------------------------------------
+
+# cache file used in this job
+cached_file1 = paste( DATA_FOLDER, CSV_TRAIN, sep = "/" );
+cached_file2 = paste( DATA_FOLDER, CSV_TEST, sep = "/" );
+
+```
+
+Getting CSV data files and assembling the main datas frame (df_*):
+
+```{r,cache=TRUE,echo=FALSE}
+
+read_csv <- function(cached_file) 
+{
+  # check if the csv files are already saved ("cached") onto disk
+  
+  if( !file.exists(cached_file) ) {
+      url = paste(URL_DATA, ZIP_FILE, sep="")
+      if( !file.exists(DATA_FOLDER) )  dir.create(DATA_FOLDER)
+  	  if( !file.exists(cached_file) ) { 
+  		  # if it is not available --> Download it !
+  		  downloadStatus = download.file(url, method="internal", destfile=cached_file)
+  	      if(downloadStatus != 0)  stop("Download failed from URL: ", url)
+  	  }
+  } 
+  # read data from zip file already writen on disk
+  df <- read.csv(cached_file)
+  return(df)
+}
+
+df_train <- read_csv(cached_file1)
+df_test <- read_csv(cached_file2)
+
+# above, we have a extract of ten lines of main data available to analyse
+colnames(df_train)
+print("Dimension of training data - rows x cols")
+dim(df_train)
+print("Dimension of test data - rows x cols")
+dim(df_test)
+```
+
+```{r,cache=TRUE,echo=FALSE}
+head(df_train["classe",])
+```
+
+* * * *
+
+## <u>Conclusion</u>
+
+
+
+* * * *
