@@ -3,7 +3,7 @@
 June, 2015  
 
 <br><br>
-You may get source code of this at <https://github.com/svicente99/MachLearn_PeerAssessment> 
+You may get source code of this at <https://github.com/svicente99/Machine_Learning> 
 
 And html version is available at RPubs: <http://rpubs.com/svicente99/MachLearn_Peer_Assesment>
 
@@ -43,7 +43,7 @@ CSV_TEST <- "pml-testing.csv"
 # -----------------------------------------------------------------
 ```
 
-Getting CSV data files and setting the main data frame (df_*):
+Getting (original) CSV data files and setting the main data frame (df_*):
 
 
 ```
@@ -206,12 +206,13 @@ class(training)
 training$classe <- as.factor(training$classe)
 
 # Equalizing dimensions (columns) to test data sets
+# These are the final counting to each part of our data use to apply algorithm models:
 
-nCols <- ncol(training)
-colsTraining1 <- colnames(training)
-colsTraining2 <- colnames(training[, -nCols])  # remove classe column (for test data set)
-testing <- testing[colsTraining1]           # leave vars that are also in training set
-df_test <- df_test[colsTraining2]           # leave vars that are also in training set
+#nCols <- ncol(training)
+##colsTraining1 <- colnames(training)
+#colsTraining2 <- colnames(training[, -nCols])  # remove classe column (for test data set)
+##testing <- testing[colsTraining1]           # leave vars that are also in training set
+#df_test <- df_test[colsTraining2]           # leave vars that are also in training set
 
 summary(training$classe); summary(testing$classe)
 ```
@@ -228,7 +229,7 @@ summary(training$classe); summary(testing$classe)
 
 #### Model Fitting
 
-We initially use 'decision tree' technique to fit a model in these data. Here are the results obtained to this adjusted model and its tree plotting.
+We initially use **Decision Tree** technique to fit a model in these data. Here are the results obtained to this adjusted model and its tree plotting.
 
 
 ```
@@ -263,7 +264,7 @@ We initially use 'decision tree' technique to fit a model in these data. Here ar
 ## 13 0.010000     20   0.37555 0.38409 0.0053226
 ```
 
-![](PA_MachLearn_test_files/figure-html/unnamed-chunk-7-1.png) 
+![](PA_MachLearn_files/figure-html/unnamed-chunk-7-1.png) 
 
 For next, we use 'random forest' algorithm to fit another model to those data. Follow the results.
 
@@ -315,10 +316,16 @@ apply(
 ##   [5,] "2.9%"  "5.8%"  "2.7%"  "9.6%"  "79.1%"
 ```
 
+We see above that both models tied more at values 'E' and 'A' for 'classe'.
+
 ### Using prediction model on Test data provided
+
+Random Forest provides right answers to 'testing' dataset in almost 99% [OOB estimate of  error rate: 0.5%]. 
+It is more then we achieve using Decision Tree [Root node error: 0.71566].
 
 
 ```r
+## modelFit2 was adjusted by "Random Forest" technique ##
 myChoiceModel <- predict(modelFit2, df_test, type="class")
 myChoiceModel
 ```
