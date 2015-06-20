@@ -2,7 +2,7 @@
 title: "Machine Learning: <br><small><b>Peer Assessment - Course Project</b></small>"
 author: "<a href='mailto:svicente99@yahoo.com' title='twitter:@svicente99'>Sergio Vicente</a>"
 twitter: "@svicente99"
-date: "May, 2015"
+date: "June, 2015"
 output: 
   html_document:
     keep_md: true
@@ -12,7 +12,7 @@ subtitle: "<span style='color:#5882FA;font-size:0.8em'>Human Activity Monitoring
 ---
 
 <br><br>
-You may get source code of this at <https://github.com/svicente99/MachLearn_PeerAssessment> 
+You may get source code of this at <https://github.com/svicente99/Machine_Learning> 
 
 And html version is available at RPubs: <http://rpubs.com/svicente99/MachLearn_Peer_Assesment>
 
@@ -53,7 +53,7 @@ CSV_TEST <- "pml-testing.csv"
 
 ```
 
-Getting CSV data files and setting the main data frame (df_*):
+Getting (original) CSV data files and setting the main data frame (df_*):
 
 ```{r,cache=TRUE,echo=FALSE}
 
@@ -166,19 +166,20 @@ class(training)
 training$classe <- as.factor(training$classe)
 
 # Equalizing dimensions (columns) to test data sets
+# These are the final counting to each part of our data use to apply algorithm models:
 
-nCols <- ncol(training)
-colsTraining1 <- colnames(training)
-colsTraining2 <- colnames(training[, -nCols])  # remove classe column (for test data set)
-testing <- testing[colsTraining1]           # leave vars that are also in training set
-df_test <- df_test[colsTraining2]           # leave vars that are also in training set
+#nCols <- ncol(training)
+##colsTraining1 <- colnames(training)
+#colsTraining2 <- colnames(training[, -nCols])  # remove classe column (for test data set)
+##testing <- testing[colsTraining1]           # leave vars that are also in training set
+#df_test <- df_test[colsTraining2]           # leave vars that are also in training set
 
 summary(training$classe); summary(testing$classe)
 ```
 
 #### Model Fitting
 
-We initially use 'decision tree' technique to fit a model in these data. Here are the results obtained to this adjusted model and its tree plotting.
+We initially use **Decision Tree** technique to fit a model in these data. Here are the results obtained to this adjusted model and its tree plotting.
 
 ```{r,fig.height=8,fig.width=9,echo=FALSE}
 set.seed(1987)
@@ -209,10 +210,16 @@ apply(
 )
 ```
 
+We see above that both models tied more at values 'E' and 'A' for 'classe'.
+
 ### Using prediction model on Test data provided
+
+Random Forest provides right answers to 'testing' dataset in almost 99% [OOB estimate of  error rate: 0.5%]. 
+It is more then we achieve using Decision Tree [Root node error: 0.71566].
 
 ```{r}
 
+## modelFit2 was adjusted by "Random Forest" technique ##
 myChoiceModel <- predict(modelFit2, df_test, type="class")
 myChoiceModel
 
@@ -228,4 +235,3 @@ pml_write_files = function(x){
 pml_write_files(myChoiceModel)
 # Twenty files were saved on data folder (check it!).
 ```
-
